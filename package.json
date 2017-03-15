@@ -36,10 +36,13 @@
     "tmp": "0.0.31"
   },
   "dependencies": {
-    "gutil": "^1.6.4",
+    "gulp-util": "^3.0.8",
     "ignore": "^3.2.4",
     "promisify-node": "^0.4.0",
     "through2": "^2.0.3"
+  },
+  "engines": {
+    "node": ">=4.8.0"
   },
   "babel": {
     "presets": [
