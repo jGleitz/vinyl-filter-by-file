@@ -20,7 +20,7 @@ const fs = promisify('fs');
 let TMP;
 let casecounter = 0;
 
-const PLUGIN_ERROR = /gulp-ignorefile/;
+const PLUGIN_ERROR = /vinyl-filter-by-file/;
 
 function readStreamPaths(stream) {
 	return new Promise((resolve, reject) =>
@@ -59,7 +59,7 @@ function streamPromise(stream) {
 	});
 }
 
-describe('gulp-ignorefile', () => {
+describe('vinyl-filter-by-file', () => {
 	before('get temporary folder', () => {
 		tmp.setGracefulCleanup();
 		return tmp.dir({unsafeCleanup: true})

@@ -3,7 +3,7 @@ import through from 'through2';
 import path from 'path';
 import IgnoreFileFilter from './IgnoreFileFilter';
 
-const PLUGIN_NAME = 'gulp-ignorefile';
+const PLUGIN_NAME = 'vinyl-filter-by-file';
 const DEFAULTS = {
 	filename: '.ignore',
 	maxParent: file => file.base,
