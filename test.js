@@ -23,10 +23,10 @@ let casecounter = 0;
 const PLUGIN_ERROR = /vinyl-filter-by-file/;
 
 function readStreamPaths(stream) {
-	return new Promise((resolve, reject) =>
-		stream.pipe(es.writeArray((error, array) =>
-			error ? reject(error) : resolve(array)
-		)))
+	return new Promise((resolve, reject) => {
+		stream.on('error', reject);
+		return stream.pipe(es.writeArray((error, array) => error ? reject(error) : resolve(array)));
+	})
 		.then(vinylarray => vinylarray.map(vinyl => path.relative(vinyl.base, vinyl.path)));
 }
 
@@ -314,6 +314,34 @@ describe('vinyl-filter-by-file', () => {
 						}))
 				))
 			.should.be.rejected
+		);
+
+		it('resolves constant paths against process.cwd', () =>
+			touch(['a/a/a', 'a/a/b', 'a/a/c/a', 'a/a/c/b', 'a/a/d'])
+				.then(writeIgnoreFile('.ignore', ['a/a/a', 'a/a/c']))
+				.then(writeIgnoreFile('a/.ignore', ['a/b']))
+				.then(prefix => (process.chdir(prefix), prefix))
+				.then(prefix => readStreamPaths(
+					gulp.src(`${prefix}/**`, {base: path.join(prefix, 'a'), read: false, nodir: true})
+						.pipe(ignorefile({
+							maxParent: '.'
+						}))
+				))
+			.should.eventually.have.members(['a/d'])
+		);
+
+		it('resolves function results against process.cwd', () =>
+			touch(['a/a/a', 'a/a/b', 'a/a/c/a', 'a/a/c/b', 'a/a/d'])
+				.then(writeIgnoreFile('.ignore', ['a/a/a', 'a/a/c']))
+				.then(writeIgnoreFile('a/.ignore', ['a/b']))
+				.then(prefix => (process.chdir(prefix), prefix))
+				.then(prefix => readStreamPaths(
+					gulp.src(`${prefix}/**`, {base: path.join(prefix, 'a'), read: false, nodir: true})
+						.pipe(ignorefile({
+							maxParent: () => '.'
+						}))
+				))
+			.should.eventually.have.members(['a/d'])
 		);
 	});
 });

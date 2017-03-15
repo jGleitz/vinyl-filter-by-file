@@ -46,9 +46,13 @@ export default function fileignore(options) {
 		throw new PluginError(PLUGIN_NAME, `options.filename may only contain strings. Got ${JSON.stringify(pluginoptions.filename)}.`);
 	}
 	if (typeof pluginoptions.maxParent === 'string') {
-		const parent = pluginoptions.maxParent;
+		const parent = path.resolve(process.cwd(), pluginoptions.maxParent);
 		pluginoptions.maxParent = () => parent;
-	} else if (typeof pluginoptions.maxParent !== 'function') {
+	} else if (typeof pluginoptions.maxParent === 'function') {
+		const oldMaxParent = pluginoptions.maxParent;
+		const cwd = process.cwd();
+		pluginoptions.maxParent = vinyl => path.resolve(cwd, oldMaxParent(vinyl));
+	} else {
 		throw new PluginError(PLUGIN_NAME, `options.maxParent must be a function or a string. Got ${typeof pluginoptions.maxParent}`);
 	}
 	if (typeof pluginoptions.excludeIgnoreFile !== 'boolean') {
