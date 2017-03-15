@@ -48,5 +48,10 @@
     "plugins": [
       "add-module-exports"
     ]
+  },
+  "nyc": {
+    "exclude": [
+      "build/test.js"
+    ]
   }
 }
