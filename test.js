@@ -225,7 +225,7 @@ describe('vinyl-filter-by-file', () => {
 							excludeIgnoreFile: false
 						}))
 				))
-			.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b', '.ignore', 'b/.ignore']).eventually
+			.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b', '.ignore', 'b/.ignore'])
 		);
 	});
 

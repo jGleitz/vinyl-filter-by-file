@@ -25,7 +25,7 @@ function consistsOf(array, type) {
 
 /**
  * @param {Object?} options:
- * name | function | type | default
+ * name | description | type | default
  * --- | --- | --- | ---
  * filename | name of ignore files | string or array of strings | '.ignore'
  * maxParent | highest folder to traverse up to | path or a function vinylobject => path | file => file.base
@@ -61,18 +61,22 @@ export default function fileignore(options) {
 
 	const filter = new IgnoreFileFilter(pluginoptions);
 
-	return through.obj((file, encoding, callback) => {
-		// check whether the file is an ignore file and should be excluded
-		if (pluginoptions.excludeIgnoreFile && pluginoptions.filename.indexOf(path.basename(file.path)) !== -1) {
-			callback(null);
-			return;
-		}
+	return through.obj(
+		// per element function
+		(file, encoding, callback) => {
+			// check whether the file is an ignore file and should be excluded
+			if (pluginoptions.excludeIgnoreFile && pluginoptions.filename.indexOf(path.basename(file.path)) !== -1) {
+				callback(null);
+				return;
+			}
 
-		filter.check(file.path, pluginoptions.maxParent(file))
-			.then(result => result ? callback(null, file) : callback(null))
-			.catch(transformError(callback));
-	},
-	callback => filter.cleanup()
-		.then(() => callback(null))
-		.catch(transformError(callback)));
+			filter.check(file.path, pluginoptions.maxParent(file))
+				.then(result => result ? callback(null, file) : callback(null))
+				.catch(transformError(callback));
+		},
+		// cleanup function
+		callback => filter.cleanup()
+			.then(() => callback(null))
+			.catch(transformError(callback))
+	);
 }
