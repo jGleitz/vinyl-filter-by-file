@@ -1,0 +1,52 @@
+{
+  "name": "vinyl-filter-by-file",
+  "version": "1.0.0",
+  "description": "Filter a vinyl file stream based on .gitignore-like files",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "rm -rf build coverage && babel *.js -d build --source-maps",
+    "lint": "eslint *.js",
+    "prepublish": "npm run build",
+    "unittest": "mocha build/test.js",
+    "coverage": "npm run build && nyc  -r=lcovonly -r=html -r=text -- npm run unittest",
+    "test": "npm run lint && npm run coverage"
+  },
+  "keywords": [
+	"vinyl",
+    "gulpplugin",
+    "gitignore",
+    "ignore",
+    "filter"
+  ],
+  "author": "Joshua Gleitze",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-latest": "^6.22.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "eslint": "^3.16.1",
+    "event-stream": "^3.3.4",
+    "gulp": "^3.9.1",
+    "mkdirp-promise": "^5.0.1",
+    "mocha": "^3.2.0",
+    "nyc": "^10.1.2",
+    "promisify-node": "^0.4.0",
+    "tmp": "0.0.31"
+  },
+  "dependencies": {
+    "gutil": "^1.6.4",
+    "ignore": "^3.2.4",
+    "promisify-node": "^0.4.0",
+    "through2": "^2.0.3"
+  },
+  "babel": {
+    "presets": [
+      "latest"
+    ],
+    "plugins": [
+      "add-module-exports"
+    ]
+  }
+}
