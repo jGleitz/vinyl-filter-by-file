@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - node
+  - 6
+  - 5
+  - 4
+
+script: npm test -s
+
+after_success: bash <(curl -s https://codecov.io/bash) -f coverage/lcov.info
