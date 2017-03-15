@@ -1,8 +1,14 @@
 import path from 'path';
 import ignore from 'ignore';
-import promisify from 'promisify-node';
+import nodeFs from 'fs';
 
-const fs = promisify('fs');
+const fs = {
+	readFile: (file, options) => new Promise((resolve, reject) =>
+		nodeFs.readFile(file, options, (error, data) => {
+			if (error) reject(error);
+			else resolve(data);
+		}))
+};
 
 const NEVER = () => false;
 const ALWAYS = () => true;
