@@ -10,6 +10,7 @@ import gulp from 'gulp';
 import path from 'path';
 import promisify from 'promisify-node';
 import mkdirp from 'mkdirp-promise';
+import {PluginError} from 'gulp-util';
 
 chai.use(chaiAsPromised);
 chai.should();
@@ -20,8 +21,20 @@ const fs = promisify('fs');
 let TMP;
 let casecounter = 0;
 
-const PLUGIN_ERROR = /vinyl-filter-by-file/;
+const PLUGIN_NAME = 'vinyl-filter-by-file';
 
+// custom assertion for errors thrown by the plugin
+chai.Assertion.addMethod('throwPluginError', function() {
+	new chai.Assertion(this._obj).to.throw(PluginError).with.property('plugin', PLUGIN_NAME);
+});
+
+/**
+ * Gets the paths of a vinyl stream.
+ *
+ * @param {Stream} stream
+ * 		A stream of vinyls.
+ * @return {Promise<string[]>} A promise for all paths of the vinyls contained in the `stream`, resolved to be relative to their vinyl’s `base`.
+ */
 function readStreamPaths(stream) {
 	return new Promise((resolve, reject) => {
 		stream.on('error', reject);
@@ -30,6 +43,15 @@ function readStreamPaths(stream) {
 		.then(vinylarray => vinylarray.map(vinyl => path.relative(vinyl.base, vinyl.path)));
 }
 
+/**
+ * Creates a function that writes an ignore file. The functions expects a base path in which the file can be created and also returns that path for further usage.
+ *
+ * @param {string} filePath
+ *		Path to where the file should be created. Relative to the base path that will be provided to the returned function. All folders on the path will be created.
+ * @param {string[]} contents
+ *		The contents of the file to be written. One array elements corresponds to one output line.
+ * @return {function} The function that takes a base path, creates the ignore file in it and returns the base path.
+ */
 function writeIgnoreFile(filePath, contents) {
 	return prefix => {
 		const fullPath = path.join(prefix, filePath);
@@ -39,6 +61,13 @@ function writeIgnoreFile(filePath, contents) {
 	};
 }
 
+/**
+ * Creates the provided filenames in a new temporary folder.
+ *
+ * @param {string[]} filenames
+ *		Names of the files that should be created. The paths may include directories that will automatically be created.
+ * @return {Promise<string>} A promise that will be resolved with the path to the folder in which the files were created after all have been created.
+ */
 function touch(filenames) {
 	const caseid = `case${casecounter++}`;
 	const prefix = path.join(TMP, caseid);
@@ -52,6 +81,13 @@ function touch(filenames) {
 		.then(() => prefix);
 }
 
+/**
+ * Creates a promise that will be resolved when the provided `stream` is finished.
+ *
+ * @param {Stream} stream
+ * 		A stream.
+ * @return {Promise} A promise that will be resolved when the `stream` finished and rejected if an error is emitted on the `stream`.
+ */
 function streamPromise(stream) {
 	return new Promise((resolve, reject) => {
 		stream.on('finish', resolve);
@@ -131,23 +167,23 @@ describe('vinyl-filter-by-file', () => {
 		it('does not accept other types', () => {
 			(() => ignorefile({
 				filename: {}
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				filename: []
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				filename: ['foo', 3, 'bar']
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				filename: ['foo', undefined, 'bar']
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				filename: null
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 		});
 
 		it('considers multiple file names and possibly joins them', () =>
@@ -172,23 +208,23 @@ describe('vinyl-filter-by-file', () => {
 		it('only accepts boolean values', () => {
 			(() => ignorefile({
 				excludeIgnoreFile: null
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				excludeIgnoreFile: {}
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				excludeIgnoreFile: 'true'
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				excludeIgnoreFile: 2
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				excludeIgnoreFile: []
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 		});
 
 		it('excludes ignore files by default', () =>
@@ -247,23 +283,23 @@ describe('vinyl-filter-by-file', () => {
 		it('does not accept other types', () => {
 			(() => ignorefile({
 				maxParent: {}
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				maxParent: []
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				maxParent: ['foo', 3, 'bar']
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				maxParent: ['foo', null, 'bar']
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 
 			(() => ignorefile({
 				maxParent: null
-			})).should.throw(PLUGIN_ERROR);
+			})).should.throwPluginError();
 		});
 
 		it('defaults to file.base', () =>
