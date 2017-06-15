@@ -109,11 +109,11 @@ describe('vinyl-filter-by-file', () => {
 	it('does not modify the stream if no ignore files exist', () => {
 		const samplefiles = ['a', 'b/a', 'b/b', 'b/c', 'b/d/a/a/a', 'b/d/a/b', 'b/e'];
 		return touch(samplefiles)
-				.then(prefix => readStreamPaths(
-					gulp.src(`${prefix}/**`, {base: prefix, read: false, nodir: true})
-						.pipe(ignorefile())
-				))
-		.should.eventually.have.members(samplefiles);
+			.then(prefix => readStreamPaths(
+				gulp.src(`${prefix}/**`, {base: prefix, read: false, nodir: true})
+					.pipe(ignorefile())
+			))
+			.should.eventually.have.members(samplefiles);
 	});
 
 	it('excludes files based on ignore files in the same folder', () =>
@@ -124,7 +124,7 @@ describe('vinyl-filter-by-file', () => {
 				gulp.src(`${prefix}/**`, {base: prefix, read: false, nodir: true})
 					.pipe(ignorefile())
 			))
-		.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b'])
+			.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b'])
 	);
 
 	it('considers ignore files from folders above', () =>
@@ -137,7 +137,7 @@ describe('vinyl-filter-by-file', () => {
 				gulp.src(`${prefix}/**`, {base: prefix, read: false, nodir: true})
 					.pipe(ignorefile())
 			))
-		.should.eventually.have.members(['b/b/b', 'b/c/b', 'b/e/c', 'd/b/b', 'd/c'])
+			.should.eventually.have.members(['b/b/b', 'b/c/b', 'b/e/c', 'd/b/b', 'd/c'])
 	);
 
 	it('emits errors to the stream', () =>
@@ -146,7 +146,7 @@ describe('vinyl-filter-by-file', () => {
 				gulp.src(`${prefix}/**`, {base: prefix, read: false, nodir: true, dot: true})
 					.pipe(ignorefile())
 			))
-		.should.be.rejectedWith('EISDIR')
+			.should.be.rejectedWith('EISDIR')
 	);
 
 	describe('filename option', () => {
@@ -200,7 +200,7 @@ describe('vinyl-filter-by-file', () => {
 							filename: ['.ignoreA', '.ignoreB']
 						}))
 				))
-			.should.eventually.eventually.have.members(['b/b/b', 'b/c/b', 'b/e/c', 'd/b/b', 'd/c'])
+				.should.eventually.eventually.have.members(['b/b/b', 'b/c/b', 'b/e/c', 'd/b/b', 'd/c'])
 		);
 	});
 
@@ -235,7 +235,7 @@ describe('vinyl-filter-by-file', () => {
 					gulp.src(`${prefix}/**`, {base: prefix, read: false, nodir: true, dot: true})
 						.pipe(ignorefile())
 				))
-			.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b'])
+				.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b'])
 		);
 
 		it('excludes ignore files if requested', () =>
@@ -248,7 +248,7 @@ describe('vinyl-filter-by-file', () => {
 							excludeIgnoreFile: true
 						}))
 				))
-			.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b'])
+				.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b'])
 		);
 
 		it('includes ignore files if requested', () =>
@@ -261,7 +261,7 @@ describe('vinyl-filter-by-file', () => {
 							excludeIgnoreFile: false
 						}))
 				))
-			.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b', '.ignore', 'b/.ignore'])
+				.should.eventually.have.members(['a', 'b/a', 'b/c/a', 'b/c/b', '.ignore', 'b/.ignore'])
 		);
 	});
 
@@ -310,7 +310,7 @@ describe('vinyl-filter-by-file', () => {
 					gulp.src(`${prefix}/**`, {base: path.join(prefix, 'a'), read: false, nodir: true})
 						.pipe(ignorefile())
 				))
-			.should.eventually.have.members(['a/a', 'a/c/a', 'a/c/b', 'a/d'])
+				.should.eventually.have.members(['a/a', 'a/c/a', 'a/c/b', 'a/d'])
 		);
 
 		it('can be set to a path', () =>
@@ -323,7 +323,7 @@ describe('vinyl-filter-by-file', () => {
 							maxParent: prefix
 						}))
 				))
-			.should.eventually.have.members(['a/d'])
+				.should.eventually.have.members(['a/d'])
 		);
 
 		it('can be set to a function', () =>
@@ -338,7 +338,7 @@ describe('vinyl-filter-by-file', () => {
 							maxParent: file => path.dirname(file.path)
 						}))
 				))
-			.should.eventually.have.members(['a/a/a', 'a/a/b', 'a/a/c/a', 'a/a/d'])
+				.should.eventually.have.members(['a/a/a', 'a/a/b', 'a/a/c/a', 'a/a/d'])
 		);
 
 		it('emits errors for bad maxParents to the stream', () =>
@@ -349,7 +349,7 @@ describe('vinyl-filter-by-file', () => {
 							maxParent: path.join(prefix, 'a/b')
 						}))
 				))
-			.should.be.rejected
+				.should.be.rejected
 		);
 
 		it('resolves constant paths against process.cwd', () =>
@@ -363,7 +363,7 @@ describe('vinyl-filter-by-file', () => {
 							maxParent: '.'
 						}))
 				))
-			.should.eventually.have.members(['a/d'])
+				.should.eventually.have.members(['a/d'])
 		);
 
 		it('resolves function results against process.cwd', () =>
@@ -377,7 +377,7 @@ describe('vinyl-filter-by-file', () => {
 							maxParent: () => '.'
 						}))
 				))
-			.should.eventually.have.members(['a/d'])
+				.should.eventually.have.members(['a/d'])
 		);
 	});
 });
