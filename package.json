@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Filter a vinyl file stream based on .gitignore-like files",
   "main": "build/index.js",
+  "repository": "https://github.com/jGleitz/vinyl-filter-by-file",
   "scripts": {
     "build": "rm -rf build coverage && babel *.js -d build --source-maps",
     "lint": "eslint *.js",
