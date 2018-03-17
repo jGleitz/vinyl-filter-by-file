@@ -1,6 +1,6 @@
 {
   "name": "vinyl-filter-by-file",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Filter a vinyl file stream based on .gitignore-like files",
   "main": "build/index.js",
   "repository": "https://github.com/jGleitz/vinyl-filter-by-file",
