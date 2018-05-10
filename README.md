@@ -1,4 +1,4 @@
-# vinyl-filter-by-file [![Build Status](https://travis-ci.org/jGleitz/vinyl-filter-by-file.svg?branch=master)](https://travis-ci.org/jGleitz/vinyl-filter-by-file) [![Code Coverage](https://codecov.io/gh/jGleitz/vinyl-filter-by-file/branch/master/graph/badge.svg)](https://codecov.io/gh/jGleitz/vinyl-filter-by-file) [![Dependency Status](https://gemnasium.com/badges/github.com/jGleitz/vinyl-filter-by-file.svg)](https://gemnasium.com/github.com/jGleitz/vinyl-filter-by-file)
+# vinyl-filter-by-file [![Build Status](https://travis-ci.org/jGleitz/vinyl-filter-by-file.svg?branch=master)](https://travis-ci.org/jGleitz/vinyl-filter-by-file) [![Code Coverage](https://codecov.io/gh/jGleitz/vinyl-filter-by-file/branch/master/graph/badge.svg)](https://codecov.io/gh/jGleitz/vinyl-filter-by-file)
 
 *Filter a [vinyl](https://github.com/gulpjs/vinyl) stream (like [gulp](https://github.com/gulpjs/gulp)’s) based on [`.gitignore`](https://git-scm.com/docs/gitignore)-like files.*
 
