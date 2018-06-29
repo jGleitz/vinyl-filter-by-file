@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+ * Deprecate Node.JS 4 and require Node.JS >= 6
 
 ## [1.0.1] – 2018-03-17
  * Upgrade dependencies

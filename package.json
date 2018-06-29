@@ -42,7 +42,7 @@
     "through2": "^2.0.3"
   },
   "engines": {
-    "node": ">=4.8.0"
+    "node": ">=6.0.0"
   },
   "babel": {
     "presets": [
