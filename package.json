@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "gulp-util": "^3.0.8",
-    "ignore": "^3.3.7",
+    "ignore": "^4.0.0",
     "through2": "^2.0.3"
   },
   "engines": {
